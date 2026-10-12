@@ -71,9 +71,9 @@ export function App() {
         <div className="relative mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 sm:py-3">
           <a href="#play" className="mr-auto flex items-baseline gap-2" onClick={() => setMode("play")}>
             <span className="font-display text-2xl font-bold text-gold-bright" lang="zh">
-              博饼
+              跋中秋
             </span>
-            <span className="text-[15px] font-medium">Bo Bing</span>
+            <span className="text-[15px] font-medium">Pua Tiong Chiu</span>
           </a>
           <div className="order-last flex w-full gap-1 sm:order-none sm:w-auto" role="tablist" aria-label="Mode">
             {MODES.map((m) => (
