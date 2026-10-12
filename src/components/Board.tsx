@@ -100,11 +100,11 @@ export function HistoryLog({ records, names, max = 200 }: { records: RollRecord[
       {shown.map(({ r, n }) => {
         const text = recordText(r, names, true);
         return (
-          <li key={n} className="flex items-center gap-3 py-2">
+          <li key={n} className="flex flex-wrap items-center gap-x-3 gap-y-0.5 py-2">
             <span className="tabular w-8 shrink-0 text-right text-[13px] text-ink-3">{n}</span>
-            <span className="w-20 shrink-0 truncate text-sm font-medium sm:w-28">{names[r.player]}</span>
+            <span className="min-w-0 flex-1 truncate text-sm font-medium sm:w-28 sm:flex-none">{names[r.player]}</span>
             <DiceRow dice={r.dice} size={18} className="shrink-0" />
-            <span className="min-w-0 flex-1 text-sm">
+            <span className="min-w-0 basis-full pl-11 text-sm sm:flex-1 sm:basis-auto sm:pl-0">
               {r.tier !== "none" ? <TierName tier={r.tier} showEn={false} /> : <span className="text-ink-3">—</span>}
               {text && <span className="ml-2 text-ink-3">{text}</span>}
             </span>
@@ -129,9 +129,34 @@ export function WinningsCells({ w }: { w: Winnings }) {
 
 export function WinningsTable({ state, names, highlight, order }: { state: GameState; names: string[]; highlight?: number; order?: number[] }) {
   const total = (w: Winnings) => PRIZE_TIERS.reduce((s, t) => s + w[t], 0);
+  const rows = order ?? names.map((_, i) => i);
   return (
-    <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-      <table className="w-full min-w-[440px] text-sm">
+    <>
+    <ul className="divide-y divide-line sm:hidden">
+      {rows.map((p) => {
+        const w = state.winnings[p];
+        return (
+          <li key={p} className={`flex items-center gap-3 py-2 ${p === highlight ? "-mx-2 rounded-md bg-surface-2 px-2" : ""}`}>
+            <span className="w-24 shrink-0 truncate font-medium">
+              {state.zy?.player === p && state.ended && <Trophy size={14} weight="fill" className="mr-1 inline text-gold" aria-label="状元 winner" />}
+              {names[p]}
+            </span>
+            <span className="flex min-w-0 flex-1 flex-wrap gap-x-2.5 gap-y-1 text-sm">
+              {PRIZE_TIERS.filter((t) => w[t] > 0).map((t) => (
+                <span key={t} className="inline-flex items-center gap-1">
+                  <TierMark tier={t} />
+                  <span className="font-display" lang="zh">{TIER_INFO[t].zh}</span>
+                  {w[t] > 1 && <span className="tabular text-ink-2">×{w[t]}</span>}
+                </span>
+              ))}
+            </span>
+            <span className="tabular font-semibold">{total(w)}</span>
+          </li>
+        );
+      })}
+    </ul>
+    <div className="hidden sm:block">
+      <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-line text-ink-2">
             <th className="py-2 pr-2 text-left font-medium">Player</th>
@@ -147,7 +172,7 @@ export function WinningsTable({ state, names, highlight, order }: { state: GameS
           </tr>
         </thead>
         <tbody>
-          {(order ?? names.map((_, i) => i)).map((p) => (
+          {rows.map((p) => (
             <tr key={p} className={`border-b border-line last:border-0 ${p === highlight ? "bg-surface-2" : ""}`}>
               <td className="max-w-32 truncate py-2 pr-2 font-medium">
                 {state.zy?.player === p && state.ended && <Trophy size={14} weight="fill" className="mr-1 inline text-gold" aria-label="状元 winner" />}
@@ -160,5 +185,6 @@ export function WinningsTable({ state, names, highlight, order }: { state: GameS
         </tbody>
       </table>
     </div>
+    </>
   );
 }
