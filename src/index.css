@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+  --bg: #f4ecdd;
+  --surface: #fbf6ec;
+  --surface-2: #f1e6d2;
+  --surface-3: #e8dbc3;
+  --ink: #241b16;
+  --ink-2: #5a4b40;
+  --ink-3: #85766a;
+  --line: #e0d1b8;
+  --line-strong: #cbb894;
+  --lacquer: #8e1f18;
+  --lacquer-2: #6f1611;
+  --on-lacquer: #fbefd9;
+  --gold: #8a6410;
+  --gold-bright: #d9ad4f;
+  --accent: #b3261e;
+  --accent-ink: #ffffff;
+  --focus: #b3261e;
+  --positive: #2f7d4f;
+  --night: #15111a;
+  --night-2: #241a26;
+
+  --t-zhuangyuan: #c98a00;
+  --t-duitang: #2a78d6;
+  --t-sanhong: #d1352b;
+  --t-sijin: #1baf7a;
+  --t-erju: #6250d6;
+  --t-yixiu: #d55181;
+  --t-none: #a99a88;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #110d0b;
+    --surface: #1a1513;
+    --surface-2: #231c18;
+    --surface-3: #2e241f;
+    --ink: #f3e8d6;
+    --ink-2: #c8b8a2;
+    --ink-3: #8f7f6d;
+    --line: #33281f;
+    --line-strong: #4a3b30;
+    --lacquer: #6d1712;
+    --lacquer-2: #4f100c;
+    --on-lacquer: #f7e7c8;
+    --gold: #d9ad4f;
+    --gold-bright: #e6bf68;
+    --accent: #d8443a;
+    --accent-ink: #ffffff;
+    --focus: #e6bf68;
+    --positive: #5cb67f;
+    --night: #0c0a10;
+    --night-2: #1a1420;
+
+    --t-zhuangyuan: #c98500;
+    --t-duitang: #3f8ce8;
+    --t-sanhong: #e5544a;
+    --t-sijin: #22a878;
+    --t-erju: #9085e9;
+    --t-yixiu: #d55181;
+    --t-none: #6f6256;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #110d0b;
+  --surface: #1a1513;
+  --surface-2: #231c18;
+  --surface-3: #2e241f;
+  --ink: #f3e8d6;
+  --ink-2: #c8b8a2;
+  --ink-3: #8f7f6d;
+  --line: #33281f;
+  --line-strong: #4a3b30;
+  --lacquer: #6d1712;
+  --lacquer-2: #4f100c;
+  --on-lacquer: #f7e7c8;
+  --gold: #d9ad4f;
+  --gold-bright: #e6bf68;
+  --accent: #d8443a;
+  --accent-ink: #ffffff;
+  --focus: #e6bf68;
+  --positive: #5cb67f;
+  --night: #0c0a10;
+  --night-2: #1a1420;
+
+  --t-zhuangyuan: #c98500;
+  --t-duitang: #3f8ce8;
+  --t-sanhong: #e5544a;
+  --t-sijin: #22a878;
+  --t-erju: #9085e9;
+  --t-yixiu: #d55181;
+  --t-none: #6f6256;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-lacquer: var(--lacquer);
+  --color-lacquer-2: var(--lacquer-2);
+  --color-on-lacquer: var(--on-lacquer);
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-positive: var(--positive);
+  --color-night: var(--night);
+  --font-display: "Noto Serif SC", "Songti SC", "STSong", "SimSun", Georgia, serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Serif SC", sans-serif;
+}
+
+html {
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Recharts: keep axes and grid recessive and themed. */
+.recharts-cartesian-axis-tick-value {
+  fill: var(--ink-3);
+  font-size: 12px;
+}
+.recharts-cartesian-grid line {
+  stroke: var(--line);
+}
+.recharts-cartesian-axis-line,
+.recharts-cartesian-axis-tick-line {
+  stroke: var(--line-strong);
+}
+.recharts-legend-item-text {
+  color: var(--ink-2) !important;
+  font-size: 13px;
+}
+.recharts-wrapper:focus,
+.recharts-surface:focus {
+  outline: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
