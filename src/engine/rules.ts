@@ -99,14 +99,25 @@ export function classify(dice: readonly number[]): Tier {
 
 /** The prize tiers a roll draws from, best first. Usually one, two with the sijin bonus. */
 export function payingTiers(dice: readonly number[], settings: Settings): Tier[] {
-  const c = faceCounts(dice);
+  return [...payingTiersCounts(faceCounts(dice), settings)];
+}
+
+const SINGLE = Object.fromEntries(
+  (["zhuangyuan", "duitang", "sanhong", "sijin", "erju", "yixiu"] as const).map((t) => [t, [t]]),
+) as unknown as Record<PrizeTier, readonly Tier[]>;
+const SIJIN_ERJU: readonly Tier[] = ["sijin", "erju"];
+const SIJIN_YIXIU: readonly Tier[] = ["sijin", "yixiu"];
+const NONE: readonly Tier[] = [];
+
+/** Same as payingTiers but from face counts. Returns shared arrays; do not mutate. */
+export function payingTiersCounts(c: readonly number[], settings: Settings): readonly Tier[] {
   const tier = classifyCounts(c);
-  if (tier === "none") return [];
+  if (tier === "none") return NONE;
   if (tier === "sijin" && settings.sijinPaysFours) {
-    if (c[4] === 2) return ["sijin", "erju"];
-    if (c[4] === 1) return ["sijin", "yixiu"];
+    if (c[4] === 2) return SIJIN_ERJU;
+    if (c[4] === 1) return SIJIN_YIXIU;
   }
-  return [tier];
+  return SINGLE[tier];
 }
 
 export interface ZyRank {
@@ -152,10 +163,10 @@ export function isSixOfAKind(dice: readonly number[]): boolean {
 
 /** Whether a roll triggers a take-all rule under these settings. */
 export function takesAll(dice: Dice | readonly number[], settings: Settings): boolean {
-  if (settings.sixKindTakesAll && isSixOfAKind(dice)) return true;
-  if (settings.chajinhuaTakesAll) {
-    const c = faceCounts(dice);
-    if (c[4] === 4 && c[1] === 2) return true;
-  }
-  return false;
+  return takesAllCounts(faceCounts(dice), settings);
+}
+
+export function takesAllCounts(c: readonly number[], settings: Settings): boolean {
+  if (settings.sixKindTakesAll && c.includes(6)) return true;
+  return settings.chajinhuaTakesAll && c[4] === 4 && c[1] === 2;
 }

@@ -52,12 +52,18 @@ export class Mt19937 implements Rng {
 
   private twist(): void {
     const mt = this.mt;
-    for (let i = 0; i < 624; i++) {
-      const y = (mt[i] & 0x80000000) | (mt[(i + 1) % 624] & 0x7fffffff);
-      let v = mt[(i + 397) % 624] ^ (y >>> 1);
-      if (y & 1) v ^= 0x9908b0df;
-      mt[i] = v;
+    let i = 0;
+    let y: number;
+    for (; i < 227; i++) {
+      y = (mt[i] & 0x80000000) | (mt[i + 1] & 0x7fffffff);
+      mt[i] = mt[i + 397] ^ (y >>> 1) ^ (y & 1 ? 0x9908b0df : 0);
     }
+    for (; i < 623; i++) {
+      y = (mt[i] & 0x80000000) | (mt[i + 1] & 0x7fffffff);
+      mt[i] = mt[i - 227] ^ (y >>> 1) ^ (y & 1 ? 0x9908b0df : 0);
+    }
+    y = (mt[623] & 0x80000000) | (mt[0] & 0x7fffffff);
+    mt[623] = mt[396] ^ (y >>> 1) ^ (y & 1 ? 0x9908b0df : 0);
     this.idx = 0;
   }
 

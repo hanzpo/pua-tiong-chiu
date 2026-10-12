@@ -1,11 +1,12 @@
 import type { Dice } from "./rng";
 import {
-  classify,
+  classifyCounts,
   compareZy,
-  payingTiers,
+  faceCounts,
+  payingTiersCounts,
   PRIZE_TIERS,
   STOCK_TIERS,
-  takesAll,
+  takesAllCounts,
   zhuangyuanRank,
   type PrizeTier,
   type Settings,
@@ -49,6 +50,8 @@ export interface GameState {
   turn: number;
   rolls: number;
   remaining: Record<StockTier, number>;
+  /** Sum of remaining. */
+  stockLeft: number;
   /** Zhuangyuan prizes not yet awarded (normally 1). */
   zyPool: number;
   zy: ZyHolder | null;
@@ -77,6 +80,7 @@ export function newGame(players: number, settings: Settings, firstPlayer = 0): G
     turn: firstPlayer,
     rolls: 0,
     remaining,
+    stockLeft: stockTotal(remaining),
     zyPool: settings.prizes.zhuangyuan,
     zy: null,
     zyChanges: 0,
@@ -86,7 +90,7 @@ export function newGame(players: number, settings: Settings, firstPlayer = 0): G
     wasted: 0,
   };
   for (const t of STOCK_TIERS) if (remaining[t] === 0) state.depleted.push(t);
-  if (stockTotal(remaining) === 0) finish(state, "cleared");
+  if (state.stockLeft === 0) finish(state, "cleared");
   return state;
 }
 
@@ -100,16 +104,17 @@ function finish(state: GameState, reason: EndReason): void {
 
 /**
  * Applies one roll for the current player. Mutates state; callers that need
- * history should clone first. Returns the record of what happened.
+ * history should clone first. The record keeps a reference to dice.
  */
 export function applyRoll(state: GameState, dice: Dice | number[]): RollRecord {
   if (state.ended) throw new Error("game is over");
   const player = state.turn;
-  const tier = classify(dice);
-  const rec: RollRecord = { player, dice: [...dice], tier, won: [], missed: [] };
+  const counts = faceCounts(dice);
+  const tier = classifyCounts(counts);
+  const rec: RollRecord = { player, dice, tier, won: [], missed: [] };
   const mine = state.winnings[player];
 
-  if (takesAll(dice, state.settings)) {
+  if (takesAllCounts(counts, state.settings)) {
     rec.takeAll = true;
     for (const t of STOCK_TIERS) {
       if (state.remaining[t] > 0) {
@@ -126,12 +131,13 @@ export function applyRoll(state: GameState, dice: Dice | number[]): RollRecord {
       state.zy = { player, dice: rec.dice, rank };
       rec.won.push("zhuangyuan");
     }
+    state.stockLeft = 0;
     state.rolls++;
     finish(state, "takeAll");
     return rec;
   }
 
-  for (const t of payingTiers(dice, state.settings)) {
+  for (const t of payingTiersCounts(counts, state.settings)) {
     if (t === "zhuangyuan") {
       if (state.zyPool === 0) continue;
       const rank = zhuangyuanRank(dice)!;
@@ -145,6 +151,7 @@ export function applyRoll(state: GameState, dice: Dice | number[]): RollRecord {
     const st = t as StockTier;
     if (state.remaining[st] > 0) {
       state.remaining[st]--;
+      state.stockLeft--;
       mine[st]++;
       rec.won.push(st);
       if (state.remaining[st] === 0) state.depleted.push(st);
@@ -156,7 +163,7 @@ export function applyRoll(state: GameState, dice: Dice | number[]): RollRecord {
 
   state.rolls++;
   state.turn = (state.turn + 1) % state.players;
-  if (stockTotal(state.remaining) === 0) finish(state, "cleared");
+  if (state.stockLeft === 0) finish(state, "cleared");
   return rec;
 }
 
