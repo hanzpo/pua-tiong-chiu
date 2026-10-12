@@ -1,6 +1,6 @@
 # Pua Tiong Chiu 跋中秋
 
-A browser app for the Mid-Autumn mooncake dice game from Xiamen. Chinese Filipinos call it Pua Tiong Chiu (Hokkien 跋中秋, Poa̍h-tiong-chhiu). In Mandarin it is Bo Bing (博饼). Play it at [bobing.hanzpo.com](https://bobing.hanzpo.com).
+A browser app for the Mid-Autumn mooncake dice game from Xiamen. Chinese Filipinos call it Pua Tiong Chiu (Hokkien 跋中秋, Poa̍h-tiong-chhiu). In Mandarin it is Bo Bing (博饼). Play it at [pua-tiong-chiu.hanzpo.com](https://pua-tiong-chiu.hanzpo.com).
 
 It has three modes:
 
