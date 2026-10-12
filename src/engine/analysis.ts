@@ -65,8 +65,15 @@ export interface GameForecast {
  * Poisson processes, and E[rolls] equals E[end time] by Wald's identity, so
  * one-dimensional integrals give exact answers.
  */
+const payCache = new Map<string, ReturnType<typeof payCounts>>();
+const takeAllCache = new Map<string, number>();
+
 export function forecast(settings: Settings): GameForecast {
-  const pays = payCounts(settings);
+  const payKey = String(settings.sijinPaysFours);
+  const takeKey = `${settings.chajinhuaTakesAll}/${settings.sixKindTakesAll}`;
+  if (!payCache.has(payKey)) payCache.set(payKey, payCounts(settings));
+  if (!takeAllCache.has(takeKey)) takeAllCache.set(takeKey, takeAllCount(settings));
+  const pays = payCache.get(payKey)!;
   const payP = {} as Record<StockTier, number>;
   const rollsToClear = {} as Record<StockTier, number>;
   for (const t of STOCK_TIERS) {
@@ -74,7 +81,7 @@ export function forecast(settings: Settings): GameForecast {
     rollsToClear[t] = settings.prizes[t] > 0 ? settings.prizes[t] / payP[t] : 0;
   }
   const zyP = exactCounts().tiers.zhuangyuan / TOTAL_OUTCOMES;
-  const takeAllP = takeAllCount(settings) / TOTAL_OUTCOMES;
+  const takeAllP = takeAllCache.get(takeKey)! / TOTAL_OUTCOMES;
   const active = STOCK_TIERS.filter((t) => settings.prizes[t] > 0);
 
   const cleared = (s: number) => {
