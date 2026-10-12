@@ -1,6 +1,6 @@
 import { applyRoll, emptyWinnings, newGame, type RollRecord, type Winnings } from "./game";
 import { Mt19937, rollDice, type Rng } from "./rng";
-import { PRIZE_TIERS, STOCK_TIERS, type Settings, type StockTier, type Tier } from "./rules";
+import { PRIZE_TIERS, type Settings, type StockTier, type Tier } from "./rules";
 import type { TierCounts } from "./enumerate";
 
 export interface SimConfig {
