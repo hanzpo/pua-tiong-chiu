@@ -1,0 +1,31 @@
+{
+  "name": "bobing",
+  "version": "1.0.0",
+  "description": "Bo Bing (博饼) mooncake dice game: play, simulate, analyze",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p . && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc -p ."
+  },
+  "type": "module",
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  },
+  "private": true
+}
