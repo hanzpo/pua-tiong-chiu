@@ -1,6 +1,8 @@
-# Bo Bing 博饼
+# Pua Tiong Chiu 跋中秋
 
-A browser app for Bo Bing, the Mid-Autumn mooncake dice game from Xiamen. It has three modes:
+A browser app for the Mid-Autumn mooncake dice game from Xiamen. Chinese Filipinos call it Pua Tiong Chiu (Hokkien 跋中秋, Poa̍h-tiong-chhiu). In Mandarin it is Bo Bing (博饼). Play it at [bobing.hanzpo.com](https://bobing.hanzpo.com).
+
+It has three modes:
 
 - **Play**: a shared-screen game for 2 to 12 players, with animated dice, shake-to-roll, undo, and saved state.
 - **Simulate**: up to 100,000 seeded games in a Web Worker, with charts for game length, seat advantage, 状元 takeovers, last-out tiers, wasted rolls, and convergence.
